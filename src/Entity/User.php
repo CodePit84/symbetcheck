@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Movement::class)]
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Movement::class, orphanRemoval: false)]
     private Collection $movements;
 
     public function __construct()
@@ -168,5 +168,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->id;
     }
 }

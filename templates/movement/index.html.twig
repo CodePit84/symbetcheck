@@ -1,0 +1,55 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Mouvements{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {# <main class="col-9 border border-light bg-white p-2"> #}
+            <main class="border border-light bg-white p-2">
+                <h1>Mouvements</h1>
+
+                {# <pre>
+                    {{ dump(app.user) }}
+                </pre> #}
+
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Mouvements</th>
+                            <th>Endroit</th>
+                            <th>Date</th>
+                            <th>User ID</th>
+                            <th>Modifier</th>
+                            <th>Supprimer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movement in movements %}
+                        {# {% for movement in movement.user_id %} #}
+
+                            {# <pre>
+                                {{ dump(movement) }}
+                            </pre> #}
+
+                            <tr class="table-info">
+                                <td>{{ movement.id }}</td>
+                                <td>{{ movement.movement }}</td>
+                                <td>{{ movement.place }}</td>
+                                <td>{{ movement.date.format('d/m/Y') }}</td>
+                                <td>{{ movement.user_id.id }}</td>
+                                <td>
+                                    <a href="{{ path('app_movement_edit', {id: movement.id}) }}" class="btn btn-info">Modifier</a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('app_movement_delete', {id: movement.id}) }}" class="btn btn-danger" onclick="return confirm('Voulez-vous réellement supprimer ce mouvement ?')">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </div>
+{% endblock %}

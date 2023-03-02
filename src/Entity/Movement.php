@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\MovementRepository;
+use App\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use App\Repository\MovementRepository;
 
 #[ORM\Entity(repositoryClass: MovementRepository::class)]
 class Movement
@@ -23,9 +25,13 @@ class Movement
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'movements')]
+    // #[ORM\ManyToOne(inversedBy: 'movements')]
+    // #[ORM\JoinColumn(nullable: false)]
+    // private ?user $user_id = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'movements')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_id = null;
+    private ?User $user_id = null;
 
     public function getId(): ?int
     {
@@ -68,15 +74,48 @@ class Movement
         return $this;
     }
 
-    public function getUserId(): ?user
+    public function getUserId(): ?User
     {
         return $this->user_id;
     }
 
-    public function setUserId(?user $user_id): self
+    public function setUserId(?User $user_id): self
     {
         $this->user_id = $user_id;
 
         return $this;
     }
+
+
+
+    public function getUser_Id(): ?User
+    {
+        // $id = $this->user_id;
+        
+        return $this->user_id;
+
+        // return $this->getUser_Id()->getId();
+        // dd($this->user_id);
+        
+    }
+
+    // public function setUser_Id(?User $user_id): self
+    // {
+    //     $this->user_id = $user_id;
+
+    //     return $this;
+    // }
+
+    public function setUser_Id(?User $user_id): self
+    {
+        $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    // public function __toString()
+    // {
+    //     return $this->user_id;
+    // }
+
 }
