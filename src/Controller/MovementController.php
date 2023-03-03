@@ -5,14 +5,12 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Movement;
 use App\Form\MovementFormType;
-use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
 use App\Repository\MovementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MovementController extends AbstractController
@@ -68,6 +66,11 @@ class MovementController extends AbstractController
         
         
         // dd($movement->getUser_Id()->getId());
+        // dd($user->getId());
+        
+        // dd($movement);
+        // $this->denyAccessUnlessGranted('movement_edit', $movement);
+        
         $userId = $movement->getUser_Id()->getId();
 
         // $userId = $user->getId();
@@ -99,15 +102,13 @@ class MovementController extends AbstractController
 
 
     #[Route('/movement/user/{id}', name: 'app_movement_user')]
-    public function index(Request $request, MovementRepository $movementRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, User $user): Response
+    public function index(Request $request, MovementRepository $movementRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, User $user, Movement $movement): Response
     {
+        
+        // dd($request);
         // $movements = $movementRepository->findBy(array('user_id' => 1));
 
         // dd($user);
-
-        // $id = $user->getuser_id;
-
-        // dd($id);
 
         // $movements = $movementRepository->findAll();
 
@@ -115,7 +116,13 @@ class MovementController extends AbstractController
 
         // dd($request);
         
+
+        // dd($movement);
+        // $this->denyAccessUnlessGranted('movement_view', $movement);
+        
         $userId = $user->getId();
+        // dd($movement->getId());
+        // if $user->getId() === $movement->getId()
 
         $movements = $movementRepository->findBy(array('user_id' => $userId));
 
@@ -163,6 +170,9 @@ class MovementController extends AbstractController
         // dd($userId);
 
         // dd($userId = $movement->getUser_Id()->getId());
+
+        $this->denyAccessUnlessGranted('movement_delete', $movement);
+
         $userId = $movement->getUser_Id()->getId();
         
 
@@ -185,6 +195,16 @@ class MovementController extends AbstractController
         return $this->render('movement/index.html.twig', compact('movements'));
     }
 
-
+    // public function sumMovement($id)
+    // {
+    //     // $querySumMovement = $this->createQueryBuilder('g')
+    //     return $this->createQueryBuilder('c')
+    //     ->select("sum(g.movement) as sumMovement")
+    //     ->where('g.user_id_id = :user_id_id')
+    //     ->setParameter('user_id_id', $id)
+    //     ->getQuery()
+    //     ->getResult()
+    //     ;
+    // }
 
 }

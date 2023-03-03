@@ -113,9 +113,29 @@ class Movement
         return $this;
     }
 
+
+
     // public function __toString()
     // {
     //     return $this->user_id;
     // }
+
+
+
+
+    // public function getUser(): ?User
+    // {
+    //     return $this->user;
+    // }
+
+    // public function setUser(?User $user): self
+    // {
+    //     $this->user = $user;
+
+    //     return $this;
+    // }
+
+
+
 
 }
