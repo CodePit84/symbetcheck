@@ -4,14 +4,21 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Movement;
+use Doctrine\ORM\Mapping\Id;
 use App\Form\MovementFormType;
 use App\Repository\UserRepository;
 use App\Repository\MovementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Container4w52XSC\getSecurity_User_Provider_Concrete_AppUserProviderService;
 
 class MovementController extends AbstractController
 {
@@ -35,9 +42,14 @@ class MovementController extends AbstractController
         // dd($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // dd($form);
-            // dd($form->getData());
-            $form->getData()->setUser_id($user);
+            // ceci fonctionnait :
+            // $form->getData()->setUser_id($user);
+
+            $movement = $form->getData();
+            $movement->setUser_id($this->getUser());
+
+            ////////////////////////////////////////
+
             $entityManager->persist($movement);
             $entityManager->flush();
 
@@ -69,7 +81,7 @@ class MovementController extends AbstractController
         // dd($user->getId());
         
         // dd($movement);
-        // $this->denyAccessUnlessGranted('movement_edit', $movement);
+        $this->denyAccessUnlessGranted('MOVEMENT_EDIT', $movement);
         
         $userId = $movement->getUser_Id()->getId();
 
@@ -100,9 +112,9 @@ class MovementController extends AbstractController
         // ]);
     }
 
-
+    #[Security("is_granted('ROLE_USER') and user === choosenUser")]
     #[Route('/movement/user/{id}', name: 'app_movement_user')]
-    public function index(Request $request, MovementRepository $movementRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, User $user, Movement $movement): Response
+    public function index(User $choosenUser, Request $request, MovementRepository $movementRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Movement $movement): Response
     {
         
         // dd($request);
@@ -115,18 +127,45 @@ class MovementController extends AbstractController
         // $movements = $movementRepository->findBy(array('user_id' => 1));
 
         // dd($request);
-        
+        // dd($user);
 
         // dd($movement);
-        // $this->denyAccessUnlessGranted('movement_view', $movement);
         
-        $userId = $user->getId();
+        // dd($request->attributes);
+
+        // dd(intval($request->attributes->get('id')));
+        
+        // dump($user);
+
+        // $user = $token->getUser();
+        // $requestURLid = intval($request->attributes->get('id'));
+        
+
+        // dump($requestURLid);
+        // dd($user);
+
+
+        // $this->denyAccessUnlessGranted('MOVEMENT_VIEW', $movement);
+        // dd($app);
+        // $userId = $user->getId();
         // dd($movement->getId());
+        
         // if $user->getId() === $movement->getId()
 
-        $movements = $movementRepository->findBy(array('user_id' => $userId));
+        // dd($movementRepository);
+        // Vérifier si des mouvements ont déjà été enregistrés id1 deconne.......
+        
+
+
+        // $userId = $user->getId();
+        // cette ligne fonctionne :
+        // $movements = $movementRepository->findBy(array('user_id' => $userId));
+
+        // mais j'essai :
+        $movements = $movementRepository->findBy(['user_id' => $this->getUser()]);
 
         return $this->render('movement/index.html.twig', compact('movements'));
+
     }
 
 
@@ -171,7 +210,7 @@ class MovementController extends AbstractController
 
         // dd($userId = $movement->getUser_Id()->getId());
 
-        $this->denyAccessUnlessGranted('movement_delete', $movement);
+        $this->denyAccessUnlessGranted('MOVEMENT_DELETE', $movement);
 
         $userId = $movement->getUser_Id()->getId();
         

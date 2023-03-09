@@ -25,7 +25,9 @@ class MovementVoter extends Voter
     protected function voteOnAttribute(string $attribute, mixed $movement, TokenInterface $token): bool
     {
         $user = $token->getUser();
+        // dd($user);
         // if the user is anonymous, do not grant access
+        // dd($user);
         if (!$user instanceof UserInterface) {
             return false;
         }
@@ -61,21 +63,28 @@ class MovementVoter extends Voter
     {
         // Le propriétaire du mouvement peut l'effacer
         
-        return $user->getId() === $movement->getUserId();
+        return $user === $movement->getUser_Id();
     }
 
     private function canEdit(Movement $movement, User $user)
     {
         // Le propriétaire du mouvement peut l'editer
         // dd($user->getId());
-        dd($movement);
-        return $user->getId() === $movement->getUser_Id()->getId();
+        // dd($movement);
+        // return $user->getId() === $movement->getUser_Id()->getId();
+        return $user === $movement->getUser_Id();
     }
 
     private function canView(Movement $movement, User $user)
     {
         // Le propriétaire des mouvements peut les voir
-        return $user->getId() === $movement->getUserId();
+        
+        // dump($user->getId());                        // 2
+        // dd($movement->getUser_Id()->getId());        // 1
+        
+        // dd(AppUser);
+        return $user->getId() === $movement->getUser_Id()->getId();
+        // return $user === $movement->getUser_Id();
     }
 
 }
