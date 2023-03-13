@@ -18,21 +18,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Container4w52XSC\getSecurity_User_Provider_Concrete_AppUserProviderService;
+// use Container4w52XSC\getSecurity_User_Provider_Concrete_AppUserProviderService;
 
 class MovementController extends AbstractController
 {
     #[Route('/movement/add/user/{id}', name: 'app_movement_add_user')]
     public function add(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, User $user): Response
     {
-        // dd($user);
         $userId = $user->getId();
         
         $movement = new Movement();
-        // $form = $this->createForm(MovementFormType::class, $movement);
         
-        // $movement->setUser_id($userId);
-        // dd($movement);
         $form = $this->createForm(MovementFormType::class, $movement)
                     // ->add('user_id')
                     ;
@@ -47,6 +43,11 @@ class MovementController extends AbstractController
 
             $movement = $form->getData();
             $movement->setUser_id($this->getUser());
+
+            // Pour transformer la valeur en négatif
+            // $prix = $movement->getMovement() * -1;
+            // $movement->setMovement($prix);
+
 
             ////////////////////////////////////////
 
@@ -164,7 +165,20 @@ class MovementController extends AbstractController
         // mais j'essai :
         $movements = $movementRepository->findBy(['user_id' => $this->getUser()]);
 
-        return $this->render('movement/index.html.twig', compact('movements'));
+        $sum = 0;
+        // foreach ($movements as $key => $movement) {
+        foreach ($movements as $movement) {
+            // dump($movement->getMovement());
+            $sum = $sum + $movement->getMovement();
+        }
+
+        // return $this->render('movement/index.html.twig', compact('movements'));
+        
+        return $this->render('movement/index.html.twig', [
+            'sum' => $sum,
+            'movements' => $movements
+        ],
+        );
 
     }
 
@@ -188,7 +202,7 @@ class MovementController extends AbstractController
 
         
 
-    //     $movements = $movementRepository->findBy(array('user_id' => 1));
+        // $movements = $movementRepository->findBy(array('user_id' => 1));
 
 
         

@@ -19,6 +19,16 @@ class MovementFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+        // ->add('movementChoice', ChoiceType::class, [
+        //     'attr' => [
+        //         'class' => 'form-control mb-3 form-select'
+        //     ],
+        //     'label' => 'Type de mouvement',
+        //     'choices' => [
+        //         'Dépot' => 'Dépot',
+        //         'Retrait' => 'Retrait' 
+        //         ]
+        // ])
             ->add('movement', MoneyType::class, [
                 'attr' => [
                     'class' => 'form-control mb-3'
@@ -31,15 +41,18 @@ class MovementFormType extends AbstractType
                 ],
                 'label' => 'Endroit',
                 'choices' => [
-                    'Choisir (facultatif)' => 'NULL',
+                    'Choisir (facultatif)' => ' ',
                     'Betclic' => 'Betclic',
                     'Winamax' => 'Winamax',
                     'FDJ' => 'FDJ' 
                     ]
             ])
             ->add('date', DateType::class, [
+                'placeholder' => 'jj/mm/aaaa',
+                'widget' => 'single_text',
+                'html5' => false,
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control js-datepicker'
                 ],
                 'label' => 'Date'
             ])
