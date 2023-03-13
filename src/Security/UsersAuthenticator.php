@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,9 +46,13 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+        
+        $iduser = $token->getUser()->getId();
 
         // For example:
-        return new RedirectResponse($this->urlGenerator->generate('home'));
+        // return new RedirectResponse($this->urlGenerator->generate('home'));
+        return new RedirectResponse($this->urlGenerator->generate('app_movement_user', ["id" => $iduser]));
+
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

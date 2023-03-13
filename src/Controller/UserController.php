@@ -54,4 +54,6 @@ class UserController extends AbstractController
 
             return $this->render('movement/index.html.twig', compact('movements'));
         }
+
+        
 }

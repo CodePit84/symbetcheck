@@ -19,7 +19,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-// use Container4w52XSC\getSecurity_User_Provider_Concrete_AppUserProviderService;
 
 class MovementController extends AbstractController
 {
@@ -92,9 +91,6 @@ class MovementController extends AbstractController
             // Pour transformer la valeur en négatif
             $prix = $movement->getMovement() * -1;
             $movement->setMovement($prix);
-
-
-            ////////////////////////////////////////
 
             $entityManager->persist($movement);
             $entityManager->flush();

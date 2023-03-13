@@ -8,8 +8,13 @@
             {# <main class="col-9 border border-light bg-white p-2"> #}
             <main class="border border-light bg-white p-2">
                 {# getTotalItemCount propre à knp_paginator #}
-                <h3> {{ movements.getTotalItemCount }} Mouvements de {{ app.user.nickname }}</h3>
-                <div class="ml-auto p-2"> Solde : <span class="badge rounded-pill bg-info">{{ sum }} €</span></div>
+                <h3>Mouvements de {{ app.user.nickname }}</h3> ({{ movements.getTotalItemCount }} mouvements)
+                <div class="ml-auto p-2"> Solde : 
+                {% if sum > 0 %}
+                <span class="badge rounded-pill bg-success">{{ sum|number_format(2) }} €</span>
+                {% else %}
+                <span class="badge rounded-pill bg-danger">{{ sum|number_format(2) }} €</span>
+                {% endif %}</div>
 
                     {# {{ dump(app.user) }} #}
 

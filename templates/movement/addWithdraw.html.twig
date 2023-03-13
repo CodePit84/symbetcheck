@@ -3,12 +3,6 @@
 {% block title %}Ajout d'un mouvement{% endblock %}
 
 {% block body %}
-
-
-
-
-
-
 <section class="container">
     <div class="row">
         <div class="col">
@@ -25,19 +19,6 @@
 
                 <fieldset class="mb-3">
                     <legend>Mon Encaissement</legend>
-
-                    {# <div class="form-check danger">
-                        <input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                        <label class="form-check-label" for="optionsRadios1">
-                        Encaissement
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                        <label class="form-check-label" for="optionsRadios2">
-                        Dépense
-                        </label>
-                    </div> #}
 
                     {{ form_row(movementForm.movement) }}
                     {{ form_row(movementForm.place) }}
