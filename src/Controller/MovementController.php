@@ -9,6 +9,7 @@ use App\Form\MovementFormType;
 use App\Repository\UserRepository;
 use App\Repository\MovementRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +23,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class MovementController extends AbstractController
 {
-    #[Route('/movement/add/user/{id}', name: 'app_movement_add_user')]
-    public function add(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, User $user): Response
+    #[Route('/movement/addWithdraw/user/{id}', name: 'app_movement_addWithdraw_user')]
+    public function addWithdraw(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, User $user): Response
     {
         $userId = $user->getId();
         
@@ -44,9 +45,53 @@ class MovementController extends AbstractController
             $movement = $form->getData();
             $movement->setUser_id($this->getUser());
 
+
+            ////////////////////////////////////////
+
+            $entityManager->persist($movement);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Mouvement ajouté avec succès');
+
+            return $this->redirectToRoute('app_movement_user', array('id' => $userId));
+        }
+        
+        return $this->render('movement/addWithdraw.html.twig', [
+            'movementForm' => $form->createView(),
+        ]);
+        
+        // return $this->render('movement/add.html.twig', [
+        //     'controller_name' => 'MovementController',
+        // ]);
+    }
+
+    #[Route('/movement/addDeposit/user/{id}', name: 'app_movement_addDeposit_user')]
+    public function addDeposit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, User $user): Response
+    {
+        // dd($request->getRequestUri());
+        // dd($request);
+        $userId = $user->getId();
+        
+        $movement = new Movement();
+        
+        $form = $this->createForm(MovementFormType::class, $movement)
+                    // ->add('user_id')
+                    ;
+        
+        $form->handleRequest($request);
+
+        // dd($form);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // ceci fonctionnait :
+            // $form->getData()->setUser_id($user);
+
+            $movement = $form->getData();
+            $movement->setUser_id($this->getUser());
+
             // Pour transformer la valeur en négatif
-            // $prix = $movement->getMovement() * -1;
-            // $movement->setMovement($prix);
+            $prix = $movement->getMovement() * -1;
+            $movement->setMovement($prix);
 
 
             ////////////////////////////////////////
@@ -59,13 +104,9 @@ class MovementController extends AbstractController
             return $this->redirectToRoute('app_movement_user', array('id' => $userId));
         }
         
-        return $this->render('movement/add.html.twig', [
+        return $this->render('movement/addDeposit.html.twig', [
             'movementForm' => $form->createView(),
         ]);
-        
-        // return $this->render('movement/add.html.twig', [
-        //     'controller_name' => 'MovementController',
-        // ]);
     }
 
 
@@ -115,7 +156,7 @@ class MovementController extends AbstractController
 
     #[Security("is_granted('ROLE_USER') and user === choosenUser")]
     #[Route('/movement/user/{id}', name: 'app_movement_user')]
-    public function index(User $choosenUser, Request $request, MovementRepository $movementRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Movement $movement): Response
+    public function index(User $choosenUser, Request $request, MovementRepository $movementRepository, PaginatorInterface $paginator, UserRepository $userRepository, EntityManagerInterface $entityManager, Movement $movement): Response
     {
         
         // dd($request);
@@ -163,14 +204,25 @@ class MovementController extends AbstractController
         // $movements = $movementRepository->findBy(array('user_id' => $userId));
 
         // mais j'essai :
-        $movements = $movementRepository->findBy(['user_id' => $this->getUser()]);
+        $movementsUser = $movementRepository->findBy(['user_id' => $this->getUser()]);
 
         $sum = 0;
         // foreach ($movements as $key => $movement) {
-        foreach ($movements as $movement) {
+        foreach ($movementsUser as $movement) {
             // dump($movement->getMovement());
             $sum = $sum + $movement->getMovement();
         }
+
+
+
+        $movements = $paginator->paginate(
+            $movementsUser, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
+
+
 
         // return $this->render('movement/index.html.twig', compact('movements'));
         

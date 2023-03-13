@@ -7,26 +7,22 @@
         <div class="row">
             {# <main class="col-9 border border-light bg-white p-2"> #}
             <main class="border border-light bg-white p-2">
-                <h1>Mouvements de {{ app.user.nickname }}</h1>
+                {# getTotalItemCount propre à knp_paginator #}
+                <h3> {{ movements.getTotalItemCount }} Mouvements de {{ app.user.nickname }}</h3>
+                <div class="ml-auto p-2"> Solde : <span class="badge rounded-pill bg-info">{{ sum }} €</span></div>
 
                     {# {{ dump(app.user) }} #}
 
                 {# {{ dump(movements) }} #}
 
-
-
-                <p>
-                Solde : <span class="badge rounded-pill bg-info">{{ sum }} €</span>
-                </p>
-
                 <table class="table table-hover">
                     <thead class="table-primary">
                         <tr>
-                            <th>ID</th>
-                            <th>Mouvements</th>
+                            {# <th>ID</th> #}
+                            <th>Mouvements en €</th>
                             <th>Endroit</th>
                             <th>Date</th>
-                            <th>User ID</th>
+                            {# <th>User ID</th> #}
                             <th>Modifier</th>
                             <th>Supprimer</th>
                         </tr>
@@ -35,26 +31,33 @@
                         {% for movement in movements %}
                         {# {% for movement in movement.user_id %} #}
 
-                            {# <pre>
-                                {{ dump(movement) }}
-                            </pre> #}
+                            {# {{ dump(movement) }} #}
 
                             <tr class="table-info">
-                                <td>{{ movement.id }}</td>
-                                <td>{{ movement.movement }}</td>
+                                {# <td>{{ movement.id }}</td> #}
+                                {% if movement.movement<0 %}
+                                    <td class="text-danger"><strong>{{ movement.movement|number_format(2) }}<strong></td>
+                                {% else %}
+                                    <td class="text-success"><strong>+{{ movement.movement|number_format(2) }}<strong></td>
+                                
+                                {% endif %}
+                                
                                 <td>{{ movement.place }}</td>
                                 <td>{{ movement.date.format('d/m/Y') }}</td>
-                                <td>{{ movement.user_id.id }}</td>
+                                {# <td>{{ movement.user_id.id }}</td> #}
                                 <td>
-                                    <a href="{{ path('app_movement_edit', {id: movement.id}) }}" class="btn btn-info">Modifier</a>
+                                    <a href="{{ path('app_movement_edit', {id: movement.id}) }}" class="btn btn-info btn-sm">Modifier</a>
                                 </td>
                                 <td>
-                                    <a href="{{ path('app_movement_delete', {id: movement.id}) }}" class="btn btn-danger" onclick="return confirm('Voulez-vous réellement supprimer ce mouvement ?')">Supprimer</a>
+                                    <a href="{{ path('app_movement_delete', {id: movement.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous réellement supprimer ce mouvement ?')">Supprimer</a>
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                <div class="navigation d-flex justify-content-center">
+                    {{ knp_pagination_render(movements) }}
+                </div>
             </main>
         </div>
     </div>
