@@ -6,14 +6,18 @@
 <section class="container">
     <div class="row">
         <div class="col">
-            <h1>Modification d'un mouvement</h1>
+            {% if movement.movement > 0 %}
+                <h1>Modification d'un Encaissement</h1>
+            {% else %}
+                <h1>Modification d'une Dépense</h1>    
+            {% endif %}
 
             {{ form_start(movementForm) }}
                 <fieldset class="mb-3">
                     <legend>Mon mouvement</legend>
-                        {# <pre>
-                        {{ dump(movement) }}
-                        </pre> #}
+                    
+                        {# {{ dump(movement) }} #}
+                    
                     {{ form_row(movementForm.movement) }}
                     {{ form_row(movementForm.place) }}
                     {{ form_row(movementForm.date) }}
