@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Movement;
-use Doctrine\ORM\Mapping\Id;
 use App\Form\MovementFormType;
 use App\Repository\UserRepository;
 use App\Repository\MovementRepository;

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Movement;
-use App\Form\MovementFormType;
 use App\Repository\UserRepository;
 use App\Repository\MovementRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,21 +19,6 @@ class UserController extends AbstractController
     #[Route('/user/{id}', name: 'app_user')]
         public function index(Request $request, MovementRepository $movementRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, User $user, Movement $movement): Response
         {
-            
-            // dd($request);
-            // $movements = $movementRepository->findBy(array('user_id' => 1));
-
-            // dd($user);
-
-            // $movements = $movementRepository->findAll();
-
-            // $movements = $movementRepository->findBy(array('user_id' => 1));
-
-            // dd($request);
-            
-
-            // dd($movement);
-            
             // dd($request);
             // dd($request->attributes);
             

@@ -17,7 +17,7 @@ class MovementFormType extends AbstractType
         $builder
             ->add('movement', MoneyType::class, [
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control'
                 ],
                 'label' => 'Mouvement'    
             ])
@@ -34,7 +34,6 @@ class MovementFormType extends AbstractType
                     ]
             ])
             ->add('date', DateType::class, [
-                'placeholder' => 'jj/mm/aaaa',
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => [

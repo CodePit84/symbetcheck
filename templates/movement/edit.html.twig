@@ -3,7 +3,14 @@
 {% block title %}Modification d'un mouvement{% endblock %}
 
 {% block body %}
+
+{# Le bloc parent si dessous est pour le script de datepicker #}
+{{ parent() }}
+
+
+{# <section class="container d-flex justify-content-center"> #}
 <section class="container">
+    {# <div class="row w-50"> #}
     <div class="row">
         <div class="col">
             {% if movement.movement > 0 %}
@@ -18,9 +25,10 @@
                     
                         {# {{ dump(movement) }} #}
                     
-                    {{ form_row(movementForm.movement) }}
+                    {{ form_row(movementForm.movement, { 'attr': {'class': 'form-control col-sm-10'} }) }}
                     {{ form_row(movementForm.place) }}
                     {{ form_row(movementForm.date) }}
+                    <script src="{{ asset('assets/js/scripts.js') }}" defer></script>
                     {# {{ form_row(movementForm.user_id) }} #}
                 </fieldset>
 
@@ -30,5 +38,4 @@
         </div>
     </div>
 </section>
-
 {% endblock %}
