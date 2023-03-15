@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
 use App\Repository\MovementRepository;
 
 #[ORM\Entity(repositoryClass: MovementRepository::class)]
@@ -119,23 +118,6 @@ class Movement
     // {
     //     return $this->user_id;
     // }
-
-
-
-
-    // public function getUser(): ?User
-    // {
-    //     return $this->user;
-    // }
-
-    // public function setUser(?User $user): self
-    // {
-    //     $this->user = $user;
-
-    //     return $this;
-    // }
-
-
 
 
 }
